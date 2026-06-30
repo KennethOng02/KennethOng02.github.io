@@ -1,0 +1,21 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogCard from "../../components/BlogCard.astro";
+
+import { getCollection } from "astro:content";
+const posts = await getCollection("blog");
+---
+
+<Layout title="Posts">
+  <ul>
+    {
+      posts.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          pubDate={post.data.pubDate}
+          url={`/posts/${post.id}`}
+        />
+      ))
+    }
+  </ul>
+</Layout>
