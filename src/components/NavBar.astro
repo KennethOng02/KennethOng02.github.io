@@ -1,63 +1,57 @@
-<nav class="navbar" aria-label="Main Navigation">
+<nav
+  class="sticky top-0 z-50 flex items-center justify-between bg-[#1a1a1a] px-6 py-4"
+  aria-label="Main Navigation"
+>
   <div class="nav-logo">
-    <a href="/">Kenneth Ong</a>
+    <a href="/" class="text-2xl font-bold text-white">Kenneth Ong</a>
   </div>
 
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/posts">Posts</a></li>
-    <li><a href="/projects">Projects</a></li>
-    <li><a href="/experiences">Experiences</a></li>
-  </ul>
+  <button
+    id="nav-toggle"
+    class="text-2xl text-white md:hidden"
+    aria-expanded="false"
+    aria-controls="nav-menu"
+    aria-label="Toggle navigation menu"
+  >
+    <span id="nav-toggle-icon">☰</span>
+  </button>
 
-  <ul class="nav-links">
-    <li><a href="/resume">Resume</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact">Contact</a></li>
-  </ul>
+  <div
+    id="nav-menu"
+    class="absolute top-full left-0 hidden w-full flex-col gap-4 bg-[#1a1a1a] px-6 py-4 md:static md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:bg-transparent md:p-0"
+  >
+    <ul class="flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/posts" class="nav-link">Posts</a></li>
+      <li><a href="/projects" class="nav-link">Projects</a></li>
+      <li><a href="/experiences" class="nav-link">Experiences</a></li>
+    </ul>
+
+    <ul class="flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
+      <li><a href="/resume" class="nav-link">Resume</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="/contact" class="nav-link">Contact</a></li>
+    </ul>
+  </div>
 </nav>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
+  @reference "tailwindcss";
 
-  .navbar {
-    background-color: #1a1a1a;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-
-  .nav-logo a {
-    color: #ffffff;
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-  }
-
-  .nav-links a {
-    color: #cccccc;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  .nav-links a:hover {
-    color: #ffffff;
+  .nav-link {
+    @apply text-base font-medium text-[#ccc] transition-colors duration-300 hover:text-white;
   }
 </style>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("nav-menu");
+  const icon = document.getElementById("nav-toggle-icon");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = menu?.classList.toggle("flex");
+    menu?.classList.toggle("hidden");
+    toggle.setAttribute("aria-expanded", String(!!isOpen));
+    if (icon) icon.textContent = isOpen ? "✕" : "☰";
+  });
+</script>

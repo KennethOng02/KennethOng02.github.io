@@ -2,4 +2,17 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Contact" />
+<Layout title="Let's Build Something." description="Open to new role.">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" placeholder="John Doe" />
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" placeholder="john@domain.com" />
+
+  <label for="content">Content:</label>
+  <textarea
+    type="text"
+    id="content"
+    name="content"
+    placeholder="Type something."></textarea>
+</Layout>
