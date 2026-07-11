@@ -1,2 +1,51 @@
 @import "tailwindcss";
 
+/* Drive dark mode off the .dark class ThemeIcon toggles (not OS media query) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --surface: #faf7f2;
+  --foreground: #292524;
+  --muted: #78716c;
+  --muted-subtle: #a8a29e;
+  --border: #e7e5e4;
+  --primary: #e15b41;
+  --link: #c2472f;
+  --primary-foreground: #ffffff;
+  --pill: #fbe9e3;
+  --pill-foreground: #9e3b26;
+}
+
+.dark {
+  --background: #1c1917;
+  --surface: #292524;
+  --foreground: #e7e5e4;
+  --muted: #a8a29e;
+  --muted-subtle: #78716c;
+  --border: #44403c;
+  --primary: #ff9776;
+  --link: #ff9776;
+  --primary-foreground: #1c1917;
+  --pill: #422a24;
+  --pill-foreground: #ffb59e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-subtle: var(--muted-subtle);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-link: var(--link);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-pill: var(--pill);
+  --color-pill-foreground: var(--pill-foreground);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
