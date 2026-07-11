@@ -1,14 +1,17 @@
+---
+import ThemeIcon from './ThemeIcon.astro';
+---
 <nav
-  class="sticky top-0 z-50 flex items-center justify-between bg-[#1a1a1a] px-6 py-4"
+  class="sticky top-0 z-50 flex items-center justify-between bg-surface border-b border-border px-6 py-4"
   aria-label="Main Navigation"
 >
   <div class="nav-logo">
-    <a href="/" class="text-2xl font-bold text-white">Kenneth Ong</a>
+    <a href="/" class="text-2xl font-bold text-foreground">Kenneth Ong</a>
   </div>
 
   <button
     id="nav-toggle"
-    class="text-2xl text-white md:hidden"
+    class="text-2xl text-foreground md:hidden"
     aria-expanded="false"
     aria-controls="nav-menu"
     aria-label="Toggle navigation menu"
@@ -18,7 +21,7 @@
 
   <div
     id="nav-menu"
-    class="absolute top-full left-0 hidden w-full flex-col gap-4 bg-[#1a1a1a] px-6 py-4 md:static md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:bg-transparent md:p-0"
+    class="absolute top-full left-0 hidden w-full flex-col gap-4 bg-surface px-6 py-4 md:static md:flex md:w-auto md:flex-row md:items-center md:gap-6 md:bg-transparent md:p-0"
   >
     <ul class="flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
       <li><a href="/" class="nav-link">Home</a></li>
@@ -32,14 +35,15 @@
       <li><a href="/about" class="nav-link">About</a></li>
       <li><a href="/contact" class="nav-link">Contact</a></li>
     </ul>
+      <ThemeIcon />
   </div>
 </nav>
 
 <style>
-  @reference "tailwindcss";
+  @reference "../styles/global.css";
 
   .nav-link {
-    @apply text-base font-medium text-[#ccc] transition-colors duration-300 hover:text-white;
+    @apply text-base font-medium text-muted transition-colors duration-300 hover:text-primary;
   }
 </style>
 

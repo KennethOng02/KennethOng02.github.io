@@ -1,18 +1,210 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const email = "kennethongkp@gmail.com";
+const github = "https://github.com/KennethOng02";
+const linkedin = "https://www.linkedin.com/in/kenneth-kuan-phing-ong-5b31322b8/";
 ---
 
-<Layout title="Let's Build Something." description="Open to new role.">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" placeholder="John Doe" />
+<Layout
+  title="Let's Build Something."
+  description="Open to full-time roles — based in Taiwan, happy to go remote."
+>
+  <p class="reveal mt-2 max-w-prose font-serif text-lg text-muted italic">
+    Whichever way is easiest for you — email, a call, or the form below.
+  </p>
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" placeholder="john@domain.com" />
+  <div class="mt-8 grid gap-10 md:grid-cols-[minmax(0,340px)_1fr] md:gap-14">
+    <aside class="reveal flex flex-col gap-6">
+      <dl
+        class="flex flex-col gap-2 rounded-2xl border border-border border-l-4 border-l-primary bg-surface p-6 font-mono text-sm leading-relaxed"
+      >
+        <div class="flex items-baseline gap-3">
+          <dt class="w-24 shrink-0 text-muted-subtle">status</dt>
+          <dd class="flex items-center gap-2 text-foreground">
+            <span
+              class="status-dot inline-block h-2 w-2 shrink-0 rounded-full bg-primary"
+              aria-hidden="true"
+            ></span>
+            Open to full-time roles
+          </dd>
+        </div>
 
-  <label for="content">Content:</label>
-  <textarea
-    type="text"
-    id="content"
-    name="content"
-    placeholder="Type something."></textarea>
+        <div class="flex items-baseline gap-3">
+          <dt class="w-24 shrink-0 text-muted-subtle">email</dt>
+          <dd class="flex flex-wrap items-center gap-2 text-foreground">
+            <a href={`mailto:${email}`} class="break-all hover:text-primary">{email}</a>
+            <button
+              type="button"
+              id="copy-email"
+              class="shrink-0 rounded-full border border-border px-2 py-0.5 text-xs text-muted transition-colors hover:border-primary hover:text-primary"
+              aria-live="polite"
+            >
+              Copy
+            </button>
+          </dd>
+        </div>
+
+        <div class="flex items-baseline gap-3">
+          <dt class="w-24 shrink-0 text-muted-subtle">based in</dt>
+          <dd class="text-foreground">Taiwan (UTC+8)</dd>
+        </div>
+      </dl>
+
+      <div class="flex flex-wrap gap-3">
+        <a
+          href={github}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-pill px-4 py-2 text-sm font-medium text-pill-foreground transition-transform hover:-translate-y-0.5"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+            ></path>
+          </svg>
+          GitHub
+        </a>
+        <a
+          href={linkedin}
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-pill px-4 py-2 text-sm font-medium text-pill-foreground transition-transform hover:-translate-y-0.5"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"
+            ></path>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </aside>
+
+    <form
+      id="contact-form"
+      action={`mailto:${email}`}
+      method="get"
+      class="reveal flex flex-col gap-5"
+    >
+      <div class="flex flex-col gap-1.5">
+        <label for="name" class="text-sm font-medium text-muted">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="Jane Doe"
+          class="rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground outline-none transition-colors placeholder:text-muted-subtle focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="email-input" class="text-sm font-medium text-muted">Your email</label>
+        <input
+          type="email"
+          id="email-input"
+          name="email"
+          required
+          placeholder="jane@company.com"
+          class="rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground outline-none transition-colors placeholder:text-muted-subtle focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="message" class="text-sm font-medium text-muted">Message</label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows="5"
+          placeholder="What are you building?"
+          class="resize-none rounded-lg border border-border bg-surface px-4 py-2.5 text-foreground outline-none transition-colors placeholder:text-muted-subtle focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
+        ></textarea>
+      </div>
+
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          type="submit"
+          class="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        >
+          Send message
+        </button>
+        <p class="text-xs text-muted-subtle">Opens your email app with this ready to send.</p>
+      </div>
+    </form>
+  </div>
 </Layout>
+
+<style>
+  @reference "tailwindcss";
+
+  .reveal {
+    animation: rise 0.5s ease-out both;
+  }
+
+  aside.reveal {
+    animation-delay: 40ms;
+  }
+
+  form.reveal {
+    animation-delay: 140ms;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .status-dot {
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .status-dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script define:vars={{ email }}>
+  const form = document.getElementById("contact-form");
+  const copyBtn = document.getElementById("copy-email");
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = document.getElementById("name")?.value ?? "";
+    const senderEmail = document.getElementById("email-input")?.value ?? "";
+    const message = document.getElementById("message")?.value ?? "";
+
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${senderEmail})`);
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  });
+
+  copyBtn?.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(email);
+    const original = copyBtn.textContent;
+    copyBtn.textContent = "Copied";
+    setTimeout(() => {
+      copyBtn.textContent = original;
+    }, 1500);
+  });
+</script>

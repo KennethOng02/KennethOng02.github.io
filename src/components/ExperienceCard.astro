@@ -1,0 +1,45 @@
+---
+import type { WorkExperience } from "../types/profile";
+
+const { companyName, jobTitle, startDate, endDate, responsibilities, skills } =
+  Astro.props as WorkExperience;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { year: "numeric", month: "short" });
+
+const dateRange = `${formatDate(startDate)} – ${endDate ? formatDate(endDate) : "Present"}`;
+---
+
+<article
+  class="bg-surface rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 border border-border p-6"
+>
+  {
+    skills && (
+      <div class="flex flex-wrap gap-2 mb-3">
+        {skills.map((skill) => (
+          <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pill text-pill-foreground">
+            {skill.name}
+          </span>
+        ))}
+      </div>
+    )
+  }
+
+  <h3 class="text-xl font-bold text-foreground">
+    {companyName}
+  </h3>
+
+  <p class="text-muted font-medium">
+    {jobTitle}
+  </p>
+
+  <p class="text-sm text-muted-subtle mt-1">
+    {dateRange}
+  </p>
+
+  <ul
+    class="list-disc list-inside mt-3 space-y-1 text-foreground text-sm"
+  >
+    {responsibilities.map((item) => <li>{item}</li>)}
+  </ul>
+</article>
