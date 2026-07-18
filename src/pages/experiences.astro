@@ -1,42 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ExperienceCard from "../components/ExperienceCard.astro";
-import type { WorkExperience } from "../types/profile";
+import profileData from "../../profile.yaml";
+import type { Profile } from "../types/profile";
 
-const workExperiences: WorkExperience[] = [
-  {
-    companyName: "Wisdom Garden Taiwan Ltd",
-    jobTitle: "Full Stack Engineer",
-    startDate: new Date("2025-08-01"),
-    endDate: null,
-    skills: [
-      { name: "TypeScript", category: "programming language" },
-      { name: "Python", category: "programming language" },
-      { name: "NextJS", category: "framework" },
-      { name: "Flask", category: "framework" },
-    ],
-    responsibilities: [
-      "Re-design legacy AngularJS frontend with NextJS, improved application performance by 30%",
-      "Built RESTful APIs with Python to support data-intensive LMS workflows, improving backend reliability and reducing response latency",
-    ],
-  },
-  {
-      companyName: "Taipei Exchange",
-      jobTitle: "Software Engineering Intern",
-      startDate: new Date("2024-07-01"),
-      endDate: new Date("2024-08-01"),
-      skills: [
-        { name: "C++", category: "programming language" },
-        { name: "QuickFIX", category: "library" },
-        { name: "FIX", category: "protocol" },
-      ],
-      responsibilities: [
-        "Engineered a FIX financial trading server using the QuickFIX/C++ library, enabling real-time order routing in compliance with FIX protocol standards",
-        "Designed and executed multithreaded load tests, identifying and resolving bottlenecks that increased system throughput by 20%",
-        "Gained hands-on experience in low-latency systems, financial protocols, and production-grade C++ development"
-      ],
-    }
-];
+const profile = profileData as Profile;
+
+const workExperiences = [...profile.workExperiences].sort(
+  (a, b) => new Date(b.startDate).valueOf() - new Date(a.startDate).valueOf()
+);
 ---
 
 <Layout title="Experiences" description="Where I've worked and what I've built.">

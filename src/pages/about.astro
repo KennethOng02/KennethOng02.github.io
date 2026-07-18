@@ -1,5 +1,260 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import profileData from "../../profile.yaml";
+import type { Profile } from "../types/profile";
+
+const profile = profileData as Profile;
+const { personalInfo, workExperiences, educations, skills } = profile;
+
+const formatMonthYear = (date: Date | string) =>
+  new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+
+const socialLabel = (url: string) => {
+  if (url.includes("github")) return "GitHub";
+  if (url.includes("linkedin")) return "LinkedIn";
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+};
+
+// Merge work experience and education into one reverse-chronological timeline.
+const timeline = [
+  ...workExperiences.map((exp) => ({
+    kind: "work" as const,
+    sortDate: new Date(exp.startDate),
+    dateLabel: `${formatMonthYear(exp.startDate)} – ${exp.endDate ? formatMonthYear(exp.endDate) : "Present"}`,
+    title: exp.jobTitle,
+    org: exp.companyName,
+    detail: exp.responsibilities,
+  })),
+  ...educations.map((edu) => ({
+    kind: "education" as const,
+    sortDate: new Date(edu.graduationYear),
+    dateLabel: `Graduated ${new Date(edu.graduationYear).getFullYear()}`,
+    title: `${edu.degree} ${edu.fieldOfStudy}`,
+    org: edu.institution,
+    detail: edu.gpa ? [`GPA ${edu.gpa}`] : [],
+  })),
+].sort((a, b) => b.sortDate.valueOf() - a.sortDate.valueOf());
+
+// Group toolbox skills by category, in a fixed, readable order.
+const categoryOrder = ["programming language", "framework", "database", "tools & devops", "language"];
+const categoryLabels: Record<string, string> = {
+  "programming language": "Languages",
+  framework: "Frameworks",
+  database: "Databases",
+  "tools & devops": "Tools & DevOps",
+  language: "Languages Spoken",
+};
+
+const skillGroups = categoryOrder
+  .map((category) => ({
+    label: categoryLabels[category] ?? category,
+    items: skills.filter((skill) => skill.category === category).map((skill) => skill.name),
+  }))
+  .filter((group) => group.items.length > 0);
 ---
 
-<Layout title="About" description="Get to know me." />
+<Layout title="About" wide>
+  <!-- Hero -->
+  <section class="border-b border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24 grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div class="hero-fade" style="--delay: 0ms">
+        <p class="font-mono text-sm text-primary mb-4">~/whoami</p>
+        <h1 class="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight">
+          Hi, I'm Kenneth.
+        </h1>
+        <p class="font-display text-xl sm:text-2xl text-muted mt-3">
+          Full-stack engineer, forever curious.
+        </p>
+        <p class="text-muted mt-6 max-w-prose leading-relaxed">
+          I grew up in Malaysia, studied Computer Science in Taiwan, spent a semester chasing
+          the midnight sun on exchange in Sweden, and now build LMS infrastructure back in
+          Taipei. I like software that quietly does its job well &mdash; and I like digging into
+          whatever's on the other side of "how does this actually work?"
+        </p>
+
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-6 text-sm text-muted-subtle">
+          <span class="font-mono">{personalInfo.country}</span>
+          <a href={`mailto:${personalInfo.email}`} class="hover:text-primary">{personalInfo.email}</a>
+        </div>
+
+        <div class="flex gap-5 mt-8 font-mono text-xs text-muted-subtle">
+          {
+            personalInfo.websites.map((site) => (
+              <a href={site} target="_blank" rel="noopener" class="hover:text-primary">
+                {socialLabel(site)}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="hero-fade" style="--delay: 150ms">
+        <img
+          src="/portrait.jpg"
+          alt="Portrait of Kenneth Ong"
+          width="1536"
+          height="2048"
+          class="aspect-[3/4] max-w-sm w-full mx-auto rounded-2xl border border-border object-cover shadow-xl"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- My story -->
+  <section class="bg-surface border-y border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+      <p class="font-mono text-sm text-primary mb-2">my story</p>
+      <h2 class="font-display text-3xl font-bold text-foreground mb-8">A bit of background</h2>
+
+      <div class="max-w-prose space-y-5 text-muted leading-relaxed">
+        <p>
+          I studied Computer Science at National Taiwan Normal University, where I first fell
+          for the moment a program goes from "shouldn't this work?" to actually working. Along
+          the way I spent a semester on exchange at Uppsala University in Sweden, studying
+          Information Technology and getting a very different perspective on how teams build
+          software &mdash; and on how to survive a Swedish winter.
+        </p>
+        <p>
+          Today I'm a Full Stack Engineer at Wisdom Garden Taiwan, where I ship Python APIs for
+          data-intensive academic workflows and re-platformed a legacy AngularJS frontend to
+          Next.js. I care about the unglamorous parts most people skip past &mdash; clean data
+          flows, typed boundaries, systems that fail loudly instead of silently.
+        </p>
+        <p>
+          Outside of work hours you'll usually find me training calisthenics and street workout
+          &mdash; right now grinding toward a clean planche and front lever. If it takes patient,
+          consistent reps to unlock, I'm probably into it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey timeline -->
+  <section class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+    <p class="font-mono text-sm text-primary mb-2">the journey</p>
+    <h2 class="font-display text-3xl font-bold text-foreground mb-10">Where I've been</h2>
+
+    <ol class="relative border-l border-border ml-3">
+      {
+        timeline.map((item) => (
+          <li class="mb-10 ml-6 last:mb-0">
+            <span
+              class="absolute -left-[7px] mt-1.5 w-3 h-3 rounded-full border-2 border-background bg-primary"
+              aria-hidden="true"
+            />
+            <p class="font-mono text-xs text-muted-subtle mb-1">{item.dateLabel}</p>
+            <h3 class="text-lg font-bold text-foreground">
+              {item.title}
+              <span class="text-xs font-mono font-normal text-muted-subtle ml-2 align-middle">
+                {item.kind === "work" ? "work" : "education"}
+              </span>
+            </h3>
+            <p class="text-muted text-sm mb-2">{item.org}</p>
+            {item.detail.length > 0 && (
+              <ul class="list-disc list-inside space-y-1 text-sm text-muted">
+                {item.detail.map((line) => <li>{line}</li>)}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Toolbox -->
+  <section class="bg-surface border-y border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+      <p class="font-mono text-sm text-primary mb-2">toolbox</p>
+      <h2 class="font-display text-3xl font-bold text-foreground mb-8">What I work with</h2>
+
+      <div class="grid gap-8 sm:grid-cols-3">
+        {
+          skillGroups.map((group) => (
+            <div>
+              <h3 class="font-mono text-xs uppercase tracking-wide text-muted-subtle mb-3">
+                {group.label}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pill text-pill-foreground">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Beyond code -->
+  <section class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+    <p class="font-mono text-sm text-primary mb-2">beyond code</p>
+    <h2 class="font-display text-3xl font-bold text-foreground mb-8">Off the keyboard</h2>
+
+    <div class="bg-surface rounded-2xl border border-border p-6 max-w-prose">
+      <p class="text-muted text-sm leading-relaxed">
+        When I'm not shipping code, I'm at the bar &mdash; literally. I train calisthenics and
+        street workout, working through the progressions toward a clean planche and front lever.
+        Same mindset as debugging: break the skill down, drill the fundamentals, and trust that
+        the reps compound.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="bg-surface border-t border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24 text-center">
+      <p class="font-mono text-sm text-primary mb-2">let's talk</p>
+      <h2 class="font-display text-3xl font-bold text-foreground mb-4">Have a project in mind?</h2>
+      <p class="text-muted max-w-prose mx-auto mb-8">
+        I'm always happy to chat about new opportunities, collaborations, or just talk shop.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold hover:opacity-90 transition"
+        >
+          Say hello
+        </a>
+        <a
+          href={`mailto:${personalInfo.email}`}
+          class="text-sm font-medium text-muted hover:text-primary"
+        >
+          {personalInfo.email}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  @reference "../styles/global.css";
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-fade {
+    animation: fade-up 0.7s ease-out both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade {
+      animation: none;
+    }
+  }
+</style>

@@ -1,5 +1,225 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Computer3D from "../components/Computer3D.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const featuredProjects = (await getCollection("projects"))
+  .filter((project) => project.data.featured)
+  .sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0));
+
+const skillGroups = [
+  { label: "Languages", items: ["TypeScript", "Python", "C/C++", "Java", "Svelte"] },
+  { label: "Frameworks", items: ["NextJS", "Flask", "Spring Boot"] },
+  { label: "Data & Tools", items: ["MySQL", "Git", "Docker"] },
+];
+
+const socials = [
+  { label: "GitHub", href: "https://github.com/KennethOng02" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/kenneth-kuan-phing-ong-5b31322b8/" },
+];
 ---
 
-<Layout title="Home" />
+<Layout title="Home" wide>
+  <!-- Hero -->
+  <section class="border-b border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24 grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div class="hero-fade" style="--delay: 0ms">
+        <p class="font-mono text-sm text-primary mb-4">~/kenneth &mdash; full-stack engineer</p>
+        <h1 class="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight">
+          Kenneth Ong
+        </h1>
+        <p class="font-display text-xl sm:text-2xl text-muted mt-3">
+          I build fast, typed, and reliable web systems.
+        </p>
+        <p class="text-muted mt-6 max-w-prose leading-relaxed">
+          Currently building full-stack LMS infrastructure at Wisdom Garden Taiwan &mdash;
+          shipping Python backend APIs for data-intensive academic workflows and modernizing a
+          legacy AngularJS frontend with Next.js. Off the clock I'm all about calisthenics and
+          street workout, currently chasing a clean planche and front lever.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4 mt-8">
+          <a
+            href="/projects"
+            class="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold hover:opacity-90 transition"
+          >
+            View Projects
+          </a>
+          <a
+            href="/contact"
+            class="inline-flex items-center justify-center rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground hover:border-primary hover:text-primary transition"
+          >
+            Contact
+          </a>
+          <a href="/resume" class="text-sm font-medium text-muted hover:text-primary underline underline-offset-4">
+            Resume
+          </a>
+        </div>
+
+        <div class="flex gap-5 mt-8 font-mono text-xs text-muted-subtle">
+          {
+            socials.map((social) => (
+              <a href={social.href} target="_blank" rel="noopener" class="hover:text-primary">
+                {social.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="hero-fade" style="--delay: 150ms">
+        <div class="mac-window rounded-xl border border-border bg-surface shadow-xl overflow-hidden">
+          <div class="flex items-center justify-between px-4 py-2">
+            <span class="font-mono text-xs text-muted-subtle tracking-wide">kenneth.app</span>
+            <span class="mac-box" aria-hidden="true"></span>
+          </div>
+          <div class="mac-stripes" aria-hidden="true"></div>
+          <div class="p-6 sm:p-8">
+            <Computer3D />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+    <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+      <div>
+        <p class="font-mono text-sm text-primary mb-2">featured work</p>
+        <h2 class="font-display text-3xl font-bold text-foreground">Selected projects</h2>
+      </div>
+      <a href="/projects" class="text-sm font-medium text-muted hover:text-primary">
+        All projects &rarr;
+      </a>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {featuredProjects.map((project) => <ProjectCard entry={project} />)}
+    </div>
+  </section>
+
+  <!-- Skills / Toolbox -->
+  <section class="bg-surface border-y border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+      <p class="font-mono text-sm text-primary mb-2">toolbox</p>
+      <h2 class="font-display text-3xl font-bold text-foreground mb-8">What I work with</h2>
+
+      <div class="grid gap-8 sm:grid-cols-3">
+        {
+          skillGroups.map((group) => (
+            <div>
+              <h3 class="font-mono text-xs uppercase tracking-wide text-muted-subtle mb-3">
+                {group.label}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pill text-pill-foreground">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience snapshot -->
+  <section class="max-w-6xl mx-auto px-6 py-16 sm:py-24">
+    <p class="font-mono text-sm text-primary mb-2">background</p>
+    <h2 class="font-display text-3xl font-bold text-foreground mb-8">A quick snapshot</h2>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div class="bg-surface rounded-2xl border border-border p-6">
+        <p class="font-mono text-xs text-muted-subtle mb-2">2025 &mdash; present</p>
+        <h3 class="text-lg font-bold text-foreground mb-1">Full Stack Engineer</h3>
+        <p class="text-muted text-sm mb-4">Wisdom Garden Taiwan Ltd</p>
+        <a href="/experiences" class="text-sm font-medium text-primary hover:underline">
+          Full experience &rarr;
+        </a>
+      </div>
+
+      <div class="bg-surface rounded-2xl border border-border p-6">
+        <p class="font-mono text-xs text-muted-subtle mb-2">graduated 2025</p>
+        <h3 class="text-lg font-bold text-foreground mb-1">B.S. Computer Science</h3>
+        <p class="text-muted text-sm mb-4">
+          National Taiwan Normal University &middot; Exchange at Uppsala University
+        </p>
+        <a href="/about" class="text-sm font-medium text-primary hover:underline"> More about me &rarr; </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="bg-surface border-t border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16 sm:py-24 text-center">
+      <p class="font-mono text-sm text-primary mb-2">let's talk</p>
+      <h2 class="font-display text-3xl font-bold text-foreground mb-4">Have a project in mind?</h2>
+      <p class="text-muted max-w-prose mx-auto mb-8">
+        I'm always happy to chat about new opportunities, collaborations, or just talk shop.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold hover:opacity-90 transition"
+        >
+          Say hello
+        </a>
+        <a
+          href="mailto:kennethongkp@gmail.com"
+          class="text-sm font-medium text-muted hover:text-primary"
+        >
+          kennethongkp@gmail.com
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  @reference "../styles/global.css";
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-fade {
+    animation: fade-up 0.7s ease-out both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .mac-box {
+    @apply inline-block;
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid var(--color-muted-subtle);
+  }
+
+  .mac-stripes {
+    height: 6px;
+    border-block: 1px solid var(--color-border);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--color-border) 0,
+      var(--color-border) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade {
+      animation: none;
+    }
+  }
+</style>

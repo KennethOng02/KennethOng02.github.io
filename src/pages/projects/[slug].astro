@@ -1,0 +1,103 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { title, description, tech, github, demo, image } = project.data;
+const { Content } = await render(project);
+---
+
+<Layout title={title} description={description}>
+  {
+    image && (
+      <div class="aspect-video w-full overflow-hidden rounded-2xl mt-6">
+        <Image
+          src={image}
+          alt={title}
+          width={1200}
+          height={630}
+          class="object-cover w-full h-full"
+        />
+      </div>
+    )
+  }
+
+  <div class="flex flex-wrap items-center gap-4 mt-6">
+    {
+      tech.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {tech.map((t) => (
+            <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pill text-pill-foreground">
+              {t}
+            </span>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="flex items-center gap-4 text-sm font-medium">
+      {
+        github && (
+          <a href={github} target="_blank" rel="noopener" class="text-muted hover:text-primary">
+            GitHub
+          </a>
+        )
+      }
+      {
+        demo && (
+          <a href={demo} target="_blank" rel="noopener" class="text-muted hover:text-primary">
+            Live Demo
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  <article class="prose-custom mt-6">
+    <Content />
+  </article>
+</Layout>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .prose-custom {
+    @apply text-foreground text-base leading-relaxed;
+  }
+  .prose-custom :global(h2) {
+    @apply text-2xl font-bold text-foreground mt-8 mb-3;
+  }
+  .prose-custom :global(h3) {
+    @apply text-xl font-bold text-foreground mt-6 mb-2;
+  }
+  .prose-custom :global(p) {
+    @apply mb-4;
+  }
+  .prose-custom :global(ul) {
+    @apply list-disc list-inside mb-4 space-y-1;
+  }
+  .prose-custom :global(ol) {
+    @apply list-decimal list-inside mb-4 space-y-1;
+  }
+  .prose-custom :global(a) {
+    @apply text-link hover:underline;
+  }
+  .prose-custom :global(code) {
+    @apply bg-pill text-pill-foreground rounded px-1.5 py-0.5 text-sm;
+  }
+  .prose-custom :global(pre) {
+    @apply bg-surface border border-border rounded-xl p-4 overflow-x-auto mb-4;
+  }
+  .prose-custom :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+</style>

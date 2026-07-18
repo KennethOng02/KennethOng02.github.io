@@ -1,0 +1,50 @@
+<div class="computer-3d">
+  <model-viewer
+    id="computer-model"
+    src="/models/apple_macintosh.glb"
+    alt="A 3D model of a classic Apple Macintosh computer"
+    loading="eager"
+    environment-image="neutral"
+    shadow-intensity="1"
+    disable-zoom
+    interaction-prompt="none"
+  ></model-viewer>
+</div>
+
+<style>
+  @reference "../styles/global.css";
+
+  .computer-3d {
+    @apply mx-auto w-full max-w-md;
+    height: 400px;
+  }
+
+  model-viewer {
+    width: 100%;
+    height: 100%;
+    --poster-color: transparent;
+    background-color: transparent;
+  }
+</style>
+
+<script>
+  import "@google/model-viewer";
+
+  const modelViewer = document.getElementById("computer-model") as HTMLElement & {
+    cameraOrbit: string;
+  };
+
+  const AMPLITUDE_DEG = 28;
+  const SPEED = 0.0006; // radians per ms
+  let start: number | null = null;
+
+  function tick(timestamp: number) {
+    if (start === null) start = timestamp;
+    const elapsed = timestamp - start;
+    const theta = AMPLITUDE_DEG * Math.sin(elapsed * SPEED);
+    modelViewer.cameraOrbit = `${theta}deg 75deg auto`;
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+</script>

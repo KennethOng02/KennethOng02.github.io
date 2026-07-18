@@ -1,0 +1,16 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0);
+});
+---
+
+<Layout title="Projects" description="Things I've built.">
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-6">
+    {projects.map((project) => <ProjectCard entry={project} />)}
+  </div>
+</Layout>

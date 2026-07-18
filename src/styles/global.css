@@ -43,9 +43,15 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-pill: var(--pill);
   --color-pill-foreground: var(--pill-foreground);
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter Variable", ui-sans-serif, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", "JetBrains Mono", "Menlo", monospace;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans);
 }
